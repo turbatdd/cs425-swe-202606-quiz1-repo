@@ -1,10 +1,18 @@
 package miu.lesson.quiz1.db;
 
 import miu.lesson.quiz1.model.Account;
+import miu.lesson.quiz1.model.AccountTierType;
+import miu.lesson.quiz1.model.AccountType;
+import miu.lesson.quiz1.model.Customer;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.UUID;
 
 public class DBContext {
     private static DBContext instance;
     private Account[] accounts;
+    private Customer[] customers;
 
     private DBContext() {
     }
@@ -17,13 +25,57 @@ public class DBContext {
     }
 
     private void loadData() {
-        Account[] arr1 = {
-                new Account(1, "TTT", "Agar", "(641) 123-0009", "dagar@m.as", "1 N Street"),
-                new Account(3, "DDD", "Garvey", "(123) 292-0018", null, "4 East Ave"),
-                new Account(4, "EEE", "Goldbloom", "(999) 165-1192", "jgold@es.co.za", null),
-                new Account(5, "AAA", "Washington", null, null, "30 W Burlington")
+
+        String id1 = UUID.randomUUID().toString();
+        String id2 = UUID.randomUUID().toString();
+        String id3 = UUID.randomUUID().toString();
+
+        Customer[] customers1 = {
+                new Customer(
+                        id1,
+                        "Bob",
+                        "Jones"),
+                new Customer(
+                        id2,
+                        "Carlos",
+                        "Jimenez"),
+                new Customer(
+                        id3,
+                        "Carlos",
+                        "Jimenez")
         };
-        accounts = arr1;
+
+        Account[] acc1 = {
+                new Account(
+                        "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+                        "AC1002",
+                        AccountTierType.PLATINUM,
+                        AccountType.CHECKING,
+                        LocalDate.parse("2016-05-17"),
+                        new BigDecimal("155900.50"),
+                        id1
+                ),
+                new Account(
+                        "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+                        "AS1001",
+                        AccountTierType.SILVER,
+                        AccountType.SAVINGS,
+                        LocalDate.parse("2021-06-02"),
+                        new BigDecimal("12500.95"),
+                        id2
+                ),
+                new Account(
+                        "cccccccc-cccc-cccc-cccc-cccccccccccc",
+                        "AS1003",
+                        AccountTierType.GOLD,
+                        AccountType.SAVINGS,
+                        LocalDate.parse("2016-07-11"),
+                        new BigDecimal("75000.00"),
+                        id3
+                )};
+
+        accounts = acc1;
+        customers = customers1;
     }
 
     public Account[] getAllAccount() {
@@ -31,6 +83,14 @@ public class DBContext {
             loadData();
         }
         return accounts;
+    }
+
+    public Customer[] getAllCustomers() {
+        if (customers == null || customers.length == 0) {
+            loadData();
+        }
+
+        return customers;
     }
 
     public Account createAccount(Account account) {
